@@ -1,26 +1,25 @@
 #!/usr/bin/python3
 # test_square.py
-
+"""Defines unittests for models/square.py.
+Unittest classes:
+    TestSquare_instantiation
+    TestSquare_size
+    TestSquare_x
+    TestSquare_y
+    TestSquare_order_of_initialization 
+    TestSquare_area
+    TestSquare_stdout
+    TestSquare_update_args
+    TestSquare_update_kwargs
+    TestSquare_to_dictionary
+"""
 import io
 import sys
 import unittest
 from models.base import Base
 from models.square import Square
+from models.rectangle import Rectangle
 
-"""Defines unittests for models/square.py.
-
-Unittest classes:
-    TestSquare_instantiation - line 24
-    TestSquare_size - line 88
-    TestSquare_x - line 166
-    TestSquare_y - line 238
-    TestSquare_order_of_initialization - line 306
-    TestSquare_area - line 322
-    TestSquare_stdout - line 343
-    TestSquare_update_args - line 426
-    TestSquare_update_kwargs - line 538
-    TestSquare_to_dictionary - 640
-"""
 
 class TestSquare_instantiation(unittest.TestCase):
     """Unittests for testing instantiation of the Square class."""
@@ -29,7 +28,7 @@ class TestSquare_instantiation(unittest.TestCase):
         self.assertIsInstance(Square(10), Base)
 
     def test_is_rectangle(self):
-        self.assertIsInstance(Square(10), Square)
+        self.assertIsInstance(Square(10), Rectangle)
 
     def test_no_args(self):
         with self.assertRaises(TypeError):
@@ -55,7 +54,7 @@ class TestSquare_instantiation(unittest.TestCase):
 
     def test_more_than_four_args(self):
         with self.assertRaises(TypeError):
-            Square(5, 4, 3, 2, 1)
+            Square(1, 2, 3, 4, 5)
 
     def test_size_private(self):
         with self.assertRaises(AttributeError):
@@ -318,6 +317,10 @@ class TestSquare_order_of_initialization(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "x must be an integer"):
             Square(1, "invalid x", "invalid y")
 
+    def test_y_after_x(self):
+        with self.assertRaisesRegex(TypeError, "y must be an integer"):
+            Square(1, 78, "invalid y")
+
 
 class TestSquare_area(unittest.TestCase):
     """Unittests for testing the area method of the Square class."""
@@ -346,7 +349,6 @@ class TestSquare_stdout(unittest.TestCase):
     @staticmethod
     def capture_stdout(sq, method):
         """Captures and returns text printed to stdout.
-
         Args:
             sq (Square): The Square ot print to stdout.
             method (str): The method to run on sq.
@@ -642,8 +644,8 @@ class TestSquare_to_dictionary(unittest.TestCase):
 
     def test_to_dictionary_output(self):
         s = Square(10, 2, 1, 1)
-        correct = {'id': 1, 'x': 2, 'size': 10, 'y': 1}
-        self.assertDictEqual(correct, s.to_dictionary())
+        dic = {'id': 1, 'x': 2, 'size': 10, 'y': 1}
+        self.assertDictEqual(dic, s.to_dictionary())
 
     def test_to_dictionary_no_object_changes(self):
         s1 = Square(10, 2, 1, 2)
@@ -654,7 +656,8 @@ class TestSquare_to_dictionary(unittest.TestCase):
     def test_to_dictionary_arg(self):
         s = Square(10, 10, 10, 10)
         with self.assertRaises(TypeError):
-            s.to_dictionary(1)
+            s.to_dictionary(18)
+
 
 if __name__ == "__main__":
     unittest.main()
